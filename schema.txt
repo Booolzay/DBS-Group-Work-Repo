@@ -1,0 +1,11 @@
+CHARGES (Fine_To_Pay, Overdue_Duration, Member_ID, Item_Name)
+
+STUDENTSTAFF (First_Name, Last_Name, Member_ID, Class_Stu_Staff, Loan_Permission, Current_Loan)
+
+LOAN (Member_ID, Item_ID, Member_Restriction, First_Name, Duration)
+
+LIBRARY (Shelf_Number, Floor_Number)
+
+CONTENT (Item_Name, Item_ID, Item_Restriction, Availability, Copies, Class_ID)
+
+SUBJECT (Subject_Name, Subject_Class_ID)
