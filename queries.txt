@@ -1,0 +1,93 @@
+1. Retrieve all the books that are available for loan and their respective subject:
+
+SELECT BOOKS.ITEM_NAME, S_SUBJECT.SUBJECT_CLASS
+FROM BOOKS
+INNER JOIN L_RESOURCES ON BOOKS.ITEMID = L_RESOURCES.ITEM_ID
+INNER JOIN S_SUBJECT ON BOOKS.I_CLASS = S_SUBJECT.SUBJECT_CLASS
+WHERE L_RESOURCES.ITEM_AVAILABILE = 'YES'
+
+2. Retrieve all students who are restricted.
+
+SELECT * FROM STUDENT
+INNER JOIN LMEMBER
+ON STUDENT.ID_NUM = LMEMBER.IDNUM
+WHERE LMEMBER.IS_RESTRICTED = 'YES';
+
+
+3. Retrieve the subject category and floor of videos available for loan.
+
+SELECT I_CLASS, FLOOR_NUM
+FROM VIDEOS
+WHERE ITEMID IN (SELECT ITEM_ID FROM L_RESOURCES WHERE ITEM_AVAILABILE = 'YES');
+
+4. Retrieve records of staff who have borrowed 6 or fewer items.
+
+SELECT * FROM STAFF
+WHERE LAMOUNT <= 6;
+
+5. Retrieve the names and ID numbers of students borrowing 3 or more items.
+
+SELECT FNAME, LNAME, ID_NUM
+FROM STUDENT
+WHERE LAMOUNT >= 3
+
+6. Display the total number of items in the library.
+
+SELECT COUNT(*) as "Total Items"
+FROM BOOKS
+UNION ALL
+SELECT COUNT(*)
+FROM DVDS
+UNION ALL
+SELECT COUNT(*)
+FROM VIDEOS;
+
+7. Display the total items in each class in the library.
+
+SELECT I_CLASS as "Subject Class", COUNT(*) as "Total Items"
+FROM BOOKS
+GROUP BY I_CLASS
+UNION ALL
+SELECT I_CLASS, COUNT(*)
+FROM DVDS
+GROUP BY I_CLASS
+UNION ALL
+SELECT I_CLASS, COUNT(*)
+FROM VIDEOS
+GROUP BY I_CLASS;
+
+8. Display the names of students who have borrowed an item and need to return it in 2 days or fewer.
+
+SELECT FNAME, LNAME
+FROM STUDENT
+WHERE LAMOUNT >= 1 AND LDURATION <= 2;
+
+9. Returns the average loan duration and average loan amount for students
+
+SELECT AVG(LDURATION) AS AVG_LOAN_DURATION, AVG(LAMOUNT) AS AVG_LOAN_AMOUNT
+FROM STUDENT;
+
+10. Returns students wth outstanding fines
+
+CREATE TABLE FINES (
+ID_NUM NUMBER(6) REFERENCES LMEMBER(IDNUM),
+ITEM_ID NUMBER(7) REFERENCES L_RESOURCES(ITEM_ID),
+FINE_AMOUNT NUMBER(1),
+PAYMENT_STATUS VARCHAR2(3)
+);
+
+SELECT STUDENT.FNAME, STUDENT.LNAME, STUDENT.ID_NUM
+FROM STUDENT
+JOIN FINES ON FINES.ID_NUM = STUDENT.ID_NUM
+WHERE FINES.PAYMENT_STATUS = 'UNPAID';
+
+
+11. Returns both staff and students with overdue items.
+
+SELECT FNAME, LNAME, ID_NUM FROM STUDENT
+WHERE LDURATION > 14
+UNION ALL
+SELECT FNAME, LNAME, ID_NUM FROM STAFF
+WHERE LDURATION > 14;
+
+
