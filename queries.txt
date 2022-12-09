@@ -14,7 +14,7 @@ ON STUDENT.ID_NUM = LMEMBER.IDNUM
 WHERE LMEMBER.IS_RESTRICTED = 'YES';
 
 
-3. Retrieve the subject category and floor of videos available for loan.
+3. Retrieve the subject category and floor of videos available
 
 SELECT I_CLASS, FLOOR_NUM
 FROM VIDEOS
